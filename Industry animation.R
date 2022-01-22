@@ -1,5 +1,7 @@
-setwd("G:/Data Works GitHub/GGanimate")
+setwd("your loacation") # set your working directory
+
 rm(list=ls())
+
 library(readxl)
 library(tidyverse)
 library(maps)

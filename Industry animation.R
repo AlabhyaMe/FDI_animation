@@ -55,32 +55,32 @@ NumberCum <- NumberCum %>%
 Dist_shape <- summarise(group_by(Nepal_Map,DISTRICT), longI = mean(long), latI = mean(lat),
                  longC = median(long),latC= median(lat), longO =mean(mean(long),median(long)), latO=mean(mean(lat),median(lat))) 
 
-all_data$Year <- as.integer(all_data$Year)
+
 all_data <- left_join(NumberCum, Dist_shape) #merge
 all_data$long <- ifelse(all_data$COUNTRY== "INDIA", all_data$longI,ifelse(all_data$COUNTRY=="CHINA",all_data$longC,all_data$longO))
 all_data$lat <- ifelse(all_data$COUNTRY== "INDIA", all_data$latI,ifelse(all_data$COUNTRY=="CHINA",all_data$latC,all_data$latO))
+all_data <- all_data[,-c(6:11)]
+all_data$cum_number<- ifelse(all_data$cum_number==0,NA,all_data$cum_number)
+all_data <- all_data[all_data$COUNTRY != "Others" & all_data$Year <= 2074,]
 
 #Map it
-#Nepal_Map%>% ggplot(aes(x=long, y= lat, group=group))+
- # geom_polygon(fill = "white", colour = "grey50", alpha=0.8) 
-
 
 map <- ggplot() +
   geom_polygon(data = Nepal_Map, aes(x=long, y = lat, group = group), fill="white", color="grey50", alpha=0.9)+
-  geom_point( data=all_data, aes(x=long, y=lat, size=cum_number, color=COUNTRY), alpha =0.7) +
-  scale_size_continuous(range=c(1,10))+
+  geom_point(data=all_data, aes(x=long, y=lat, size=cum_number, color = COUNTRY , alpha =0.7)) +
+  scale_size_continuous(range=c(1,12))+
   labs( title = "Number of registered FDI in Nepal in each district by Year (BS)")
 
 map
 
 animate_map <- map + 
-  transition_time(all_data$Year)+
+  transition_time(Year)+
   ease_aes('linear')+
-  labs(subtitle = "Year: round({frame_time},1)")
+  labs(subtitle = "Year: {round(frame_time,1)}")
 
-animation <- animate(animate_map, height= 720, width=1080, fps=30, duration = 30, end_pause = 60, res=100)
+animation <- animate(animate_map, height= 800, width=800, fps=15, duration = 30, end_pause = 60, res=100)
 animation
 
-anim_save("FDI by number.gif", animation)
+anim_save("FDI by number2.mp4", animation)
   
-   
+gganimate(animation, "FDI flow.mp4")

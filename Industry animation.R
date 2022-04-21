@@ -31,7 +31,7 @@ Nepal_Map <- left_join(Nepal_Map, Nepal@data) # keep all of Nepal_Map
 Nepal_Map$dist_name <- toupper(Nepal_Map$dist_name)
 
 #functions imported
-source("G:/Data Works GitHub/GGanimate/District Renaming.R") 
+source("**Directory**District Renaming.R") 
 
 NumberWise<- function_dist_name(NumberWise,2)
 
@@ -41,7 +41,7 @@ NumberWise <- na.omit(NumberWise)
 
 
 #functions imported
-source("G:/Data Works GitHub/GGanimate/District_Year.R") 
+source("**Directory** District_Year.R") 
 
 #new dataset called "data_set in imported
 NumberCum <- left_join(data_set, NumberWise)
